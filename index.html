@@ -284,18 +284,25 @@
     border-radius: 12px;
     overflow: hidden;
     aspect-ratio: 16 / 10;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-dim);
-    font-size: 14px;
     transition: all 0.25s;
+  }
+
+  .screenshot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s;
   }
 
   .screenshot:hover {
     border-color: var(--accent);
     transform: translateY(-4px);
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+  }
+
+  .screenshot:hover img {
+    transform: scale(1.04);
   }
 
   footer {
@@ -409,9 +416,15 @@
   <h3>Скриншоты</h3>
   <p>Как выглядит плеер.</p>
   <div class="screenshots">
-    <div class="screenshot">Главное окно</div>
-    <div class="screenshot">Настройки</div>
-    <div class="screenshot">Видео в отдельном окне</div>
+    <div class="screenshot">
+      <img src="window.png" alt="Главное окно">
+    </div>
+    <div class="screenshot">
+      <img src="settings.png" alt="Настройки">
+    </div>
+    <div class="screenshot">
+      <img src="video.png" alt="Видео в отдельном окне">
+    </div>
   </div>
 </section>
 
