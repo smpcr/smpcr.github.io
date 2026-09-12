@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SMPC — Sharped Media Player Common</title>
+<link rel="icon" type="image/png"
+      href="https://avatars.githubusercontent.com/u/328368467?s=400&u=a32f288b875bebbde7fd2a9690027c8f870ca2b4&v=4">
+<style>
+  :root {
+    --accent: #FF6B35;
+    --accent-hover: #FF8555;
+    --bg: #121212;
+    --panel: #181818;
+    --panel-2: #1F1F1F;
+    --hover: #282828;
+    --text: #FFFFFF;
+    --text-dim: #B3B3B3;
+    --border: #282828;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Segoe UI', 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  a { color: var(--accent); text-decoration: none; transition: color 0.2s; }
+  a:hover { color: var(--accent-hover); }
+
+  header {
+    background: linear-gradient(180deg, #0A0A0A 0%, #000 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-mark {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    object-fit: cover;
+    box-shadow: 0 0 20px rgba(255, 107, 53, 0.4);
+    transition: transform 0.25s;
+  }
+
+  .logo-mark:hover { transform: scale(1.08); }
+
+  .logo-text h1 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1.1;
+  }
+
+  .logo-text p {
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  nav a {
+    color: var(--text);
+    margin-left: 24px;
+    font-size: 14px;
+    position: relative;
+  }
+
+  nav a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 0;
+    height: 2px;
+    background: var(--accent);
+    transition: width 0.25s;
+  }
+
+  nav a:hover { color: var(--accent); }
+  nav a:hover::after { width: 100%; }
+
+  .hero {
+    padding: 100px 40px 80px;
+    text-align: center;
+    background: radial-gradient(ellipse at top, rgba(255, 107, 53, 0.15) 0%, transparent 60%);
+  }
+
+  .hero-icon {
+    width: 120px;
+    height: 120px;
+    border-radius: 24px;
+    object-fit: cover;
+    margin-bottom: 28px;
+    box-shadow: 0 0 60px rgba(255, 107, 53, 0.5);
+    transition: transform 0.3s;
+  }
+
+  .hero-icon:hover { transform: scale(1.05) rotate(-2deg); }
+
+  .hero h2 {
+    font-size: 52px;
+    font-weight: 800;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.15;
+  }
+
+  .hero p {
+    font-size: 18px;
+    color: var(--text-dim);
+    max-width: 640px;
+    margin: 0 auto 40px;
+  }
+
+  .buttons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    padding: 14px 32px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+  }
+  .btn-primary:hover {
+    background: var(--accent-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(255, 107, 53, 0.4);
+    color: #fff;
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-secondary:hover {
+    background: var(--hover);
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .section {
+    padding: 80px 40px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section h3 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--text);
+  }
+
+  .section h3::after {
+    content: '';
+    display: block;
+    width: 48px;
+    height: 3px;
+    background: var(--accent);
+    margin-top: 12px;
+    border-radius: 2px;
+  }
+
+  .section > p {
+    color: var(--text-dim);
+    margin-bottom: 40px;
+    font-size: 16px;
+  }
+
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+  }
+
+  .feature {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    transition: all 0.25s;
+  }
+
+  .feature:hover {
+    background: var(--panel-2);
+    border-color: var(--accent);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+  }
+
+  .feature-icon {
+    width: 48px;
+    height: 48px;
+    background: rgba(255, 107, 53, 0.15);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-bottom: 16px;
+    color: var(--accent);
+  }
+
+  .feature h4 {
+    font-size: 17px;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+
+  .feature p {
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+
+  .tech-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .tech-tag {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    color: var(--text-dim);
+    transition: all 0.2s;
+  }
+
+  .tech-tag:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .screenshots {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+  }
+
+  .screenshot {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    aspect-ratio: 16 / 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-dim);
+    font-size: 14px;
+    transition: all 0.25s;
+  }
+
+  .screenshot:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+  }
+
+  footer {
+    background: #0A0A0A;
+    border-top: 1px solid var(--border);
+    padding: 40px;
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 13px;
+    margin-top: 60px;
+  }
+
+  footer .footer-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+
+  footer .footer-logo img {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+  }
+
+  @media (max-width: 640px) {
+    header { padding: 14px 20px; flex-wrap: wrap; gap: 12px; }
+    nav a { margin-left: 12px; font-size: 13px; }
+    .hero { padding: 60px 20px 40px; }
+    .hero h2 { font-size: 32px; }
+    .hero p { font-size: 15px; }
+    .hero-icon { width: 88px; height: 88px; }
+    .section { padding: 50px 20px; }
+    .section h3 { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <img class="logo-mark"
+         src="https://avatars.githubusercontent.com/u/328368467?s=400&u=a32f288b875bebbde7fd2a9690027c8f870ca2b4&v=4"
+         alt="SMPC">
+    <div class="logo-text">
+      <h1>SMPC</h1>
+      <p>Sharped Media Player Common</p>
+    </div>
+  </div>
+  <nav>
+    <a href="#features">Возможности</a>
+    <a href="#screenshots">Скриншоты</a>
+    <a href="#tech">Технологии</a>
+    <a href="#download">Скачать</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <img class="hero-icon"
+       src="https://avatars.githubusercontent.com/u/328368467?s=400&u=a32f288b875bebbde7fd2a9690027c8f870ca2b4&v=4"
+       alt="SMPC">
+  <h2>Медиаплеер для Windows</h2>
+  <p>Музыка и видео в одном приложении. Тёмная тема, три языка, поддержка обложек и тегов. Написан на C# с использованием WPF, NAudio и LibVLCSharp.</p>
+  <div class="buttons">
+    <a href="#download" class="btn btn-primary">Скачать для Windows</a>
+    <a href="https://github.com/smpcr/Sharped-Media-Player-Common" class="btn btn-secondary">GitHub</a>
+  </div>
+</section>
+
+<section class="section" id="features">
+  <h3>Возможности</h3>
+  <p>Всё, что нужно для прослушивания музыки и просмотра видео.</p>
+  <div class="features">
+    <div class="feature">
+      <div class="feature-icon">♪</div>
+      <h4>Аудио</h4>
+      <p>MP3, WAV, M4A, AIFF, FLAC. Воспроизведение через NAudio с плавной перемоткой и регулировкой громкости.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">▶</div>
+      <h4>Видео</h4>
+      <p>MP4, MKV, AVI, MOV, WEBM. Отдельное окно видео, которое всегда рядом с плеером.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🖼</div>
+      <h4>Обложки и теги</h4>
+      <p>Чтение обложек и метаданных из файлов через TagLib#. Название, исполнитель, альбом, год.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">☰</div>
+      <h4>Плейлисты</h4>
+      <p>Сохранение списка треков между запусками, поиск, сортировка, перемещение вверх и вниз.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🌐</div>
+      <h4>Три языка</h4>
+      <p>Русский, английский и украинский интерфейс. Переключение прямо в настройках.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🌙</div>
+      <h4>Тёмная тема</h4>
+      <p>Стильный тёмный интерфейс с оранжевым акцентом в духе современных стриминговых сервисов.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="screenshots">
+  <h3>Скриншоты</h3>
+  <p>Как выглядит плеер.</p>
+  <div class="screenshots">
+    <div class="screenshot">Главное окно</div>
+    <div class="screenshot">Настройки</div>
+    <div class="screenshot">Видео в отдельном окне</div>
+  </div>
+</section>
+
+<section class="section" id="tech">
+  <h3>Технологии</h3>
+  <p>Проект построен на стеке .NET и открытых библиотеках.</p>
+  <div class="tech-list">
+    <span class="tech-tag">C# 7.2</span>
+    <span class="tech-tag">WPF</span>
+    <span class="tech-tag">.NET Framework 4.7.2</span>
+    <span class="tech-tag">NAudio 2.2.1</span>
+    <span class="tech-tag">LibVLCSharp 3.8.2</span>
+    <span class="tech-tag">TagLib#</span>
+    <span class="tech-tag">Newtonsoft.Json</span>
+    <span class="tech-tag">MSIX</span>
+  </div>
+</section>
+
+<section class="section" id="download">
+  <h3>Скачать</h3>
+  <p>Приложение распространяется как AppX-пакет для Windows 10 и 11.</p>
+  <div class="buttons" style="justify-content: flex-start;">
+    <a href="https://github.com/smpcr/Sharped-Media-Player-Common/releases/latest" class="btn btn-primary">Скачать</a>
+  </div>
+  <p style="margin-top: 20px; font-size: 13px; color: var(--text-dim);">
+    Перед установкой установите сертификат в «Доверенные корневые центры сертификации».
+  </p>
+</section>
+
+<footer>
+  <div class="footer-logo">
+    <img src="https://avatars.githubusercontent.com/u/328368467?s=400&u=a32f288b875bebbde7fd2a9690027c8f870ca2b4&v=4"
+         alt="SMPC">
+    SMPC
+  </div>
+  <p>Sharped Media Player Common · 2024–2026</p>
+  <p style="margin-top: 8px;">Copyright © 2024-2026 SMPC Project</p>
+</footer>
+
+</body>
+</html>
